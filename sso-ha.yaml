@@ -1,0 +1,35 @@
+#####################Creating Serviceaccount, Roles and RoleBinding For JGROUPS Discovery Protocol (KUBE_PING)######################
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: sso
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: keycloak-kubeping-service-account
+  namespace: sso
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: keycloak-kubeping-pod-reader
+  namespace: sso
+rules:
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: keycloak-kubeping-api-access
+  namespace: sso
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: keycloak-kubeping-pod-reader
+subjects:
+- kind: ServiceAccount
+  name: keycloak-kubeping-service-account
+  namespace: sso
