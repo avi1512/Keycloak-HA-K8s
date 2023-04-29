@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: keycloak-virtualservice
+  namespace: sso
+spec:
+  hosts:
+  - "keycloak.local.com"
+  gateways:
+  - keycloak-gateway
+  http:
+  - route:
+    - destination: 
+        host: keycloak-svc.sso.svc.cluster.local
+        port: 
+          number: 8080
